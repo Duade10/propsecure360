@@ -1,9 +1,5 @@
-import requests
-
 from django.conf import settings
 from django.shortcuts import HttpResponse, redirect
-from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,18 +7,17 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-from . import models, serializers, paginations
+from . import models, serializers
 
-class UserRegistrationAPIView(generics.CreateAPIView):
-    serializer_class = serializers.UserRegistrationSerializer
+class UserRegistrationAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.save()
-            user = models.User.objects.get(id=data)
+        serializer = serializers.UserRegistrationSerializer(data=request.data)
 
-            refresh = RefreshToken.for_user(user)
+        if serializer.is_valid():
+            data = serializer.save(validated_data=serializer.validated_data)
+            
+            refresh = RefreshToken.for_user(data)
             access_token = str(refresh.access_token)
             refresh_token = str(refresh)
 
