@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import cloudinary
 from pathlib import Path
 from datetime import timedelta
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "users.apps.UsersConfig",
+    "userrequests.apps.UserrequestsConfig",
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
@@ -137,6 +138,12 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+cloudinary.config(
+    cloud_name="dpasfri0b",
+    api_key="383883147229446",
+    api_secret="O6HfojVGQsgjBwQpUARw83EKizU",
+)
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
